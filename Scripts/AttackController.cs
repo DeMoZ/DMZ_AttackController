@@ -189,6 +189,7 @@ namespace Attack
 
             try
             {
+                var startTime = Time.time;
                 Debug.Log($"Timer started. {time} {description}");
 
                 while (elapsedTime < time)
@@ -205,7 +206,7 @@ namespace Attack
                 }
 
                 progress?.Invoke(time);
-                Debug.Log($"Timer elapsed. {time} {description}".Green());
+                Debug.Log($"Timer elapsed. {time} {description}; count {Time.time - startTime}".Green());
             }
             catch (TaskCanceledException)
             {

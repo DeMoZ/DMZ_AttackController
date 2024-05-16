@@ -6,6 +6,7 @@ namespace Attack
     public interface IAttackRepository
     {
         void Init(AttackConfig config);
+        List<string> GetSequencesKeys();
         bool TryGetSequence(string code, out AttackElement element);
         float GetAttackTime(string code);
         float GetSequenceTime(string code);
@@ -29,6 +30,8 @@ namespace Attack
                 _attacks[sequenceCode].Init(pair.Key, sequenceCode);
             }
         }
+
+        public List<string> GetSequencesKeys() => _attacks.Select(item => item.Key).ToList();
 
         private float GetDefaultSequenceTime() => _config.sequenceTime;
         private float GetDefaultFailTime() => _config.failTime;
