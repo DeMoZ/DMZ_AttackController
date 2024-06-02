@@ -1,8 +1,10 @@
 using System;
-using Attack;
 
-public class InputBus
+namespace Attack
 {
-    public Action<AttackDirection> AttackClicked;
-    public Action BrakeClicked;
+    public class InputBus
+    {
+        public Action<AttackDirection> AttackClicked;
+        public Action BrakeClicked;
+    }
 }
