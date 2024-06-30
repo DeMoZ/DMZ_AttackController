@@ -1,6 +1,6 @@
 namespace Attack
 {
-    public enum AttackState
+    public enum AttackPhase
     {
         None,
         Idle,

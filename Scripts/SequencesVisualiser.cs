@@ -52,10 +52,10 @@ namespace Attack
             
             switch (progress.State)
             {
-                case AttackState.SequenceReady:
+                case AttackPhase.SequenceReady:
                     sequenceBar.SetProgress(progress);
                     break;
-                case AttackState.SequenceFail:
+                case AttackPhase.SequenceFail:
                     failBar.SetProgress(progress);
                     break;
             }

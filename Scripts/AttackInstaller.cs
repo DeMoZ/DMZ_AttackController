@@ -10,7 +10,7 @@ namespace Attack
         public override void InstallBindings()
         {
             var playerData = new AttackPlayerData();
-            playerData.AttackSequenceState.Value = AttackState.Idle;
+            playerData.AttackSequenceState.Value = AttackPhase.Idle;
 
             var attackRepository = new AttackRepository();
             attackRepository.Init(attackConfig);

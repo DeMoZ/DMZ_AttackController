@@ -50,17 +50,17 @@ namespace Attack
 
             switch (_attackPlayerData.AttackSequenceState.Value)
             {
-                case AttackState.None:
-                case AttackState.SequenceFail:
+                case AttackPhase.None:
+                case AttackPhase.SequenceFail:
                     Debug.Log("Attacking not available");
                     break;
-                case AttackState.Idle:
+                case AttackPhase.Idle:
                     EvaluateSequence();
                     break;
-                case AttackState.Attack:
+                case AttackPhase.Attack:
                     MarkFail();
                     break;
-                case AttackState.SequenceReady:
+                case AttackPhase.SequenceReady:
                     _attackTokenSource.Cancel();
                     EvaluateSequence();
                     break;
@@ -85,7 +85,7 @@ namespace Attack
             var time = _attackRepository.GetAttackTime(_attackPlayerData.CurrentSequenceCode);
             try
             {
-                await SequenceAsync(AttackState.Attack, time, _attackTokenSource.Token);
+                await SequenceAsync(AttackPhase.Attack, time, _attackTokenSource.Token);
 
                 if (_attackTokenSource.IsCancellationRequested)
                     return;
@@ -93,13 +93,13 @@ namespace Attack
                 if (_isFailed)
                 {
                     time = _attackRepository.GetFailTime(_attackPlayerData.CurrentSequenceCode);
-                    await SequenceAsync(AttackState.SequenceFail, time, _attackTokenSource.Token, onFinal: SetIdle);
+                    await SequenceAsync(AttackPhase.SequenceFail, time, _attackTokenSource.Token, onFinal: SetIdle);
                     _isFailed = false;
                 }
                 else
                 {
                     time = _attackRepository.GetSequenceTime(_attackPlayerData.CurrentSequenceCode);
-                    await SequenceAsync(AttackState.SequenceReady, time, _attackTokenSource.Token, onEnd: SetIdle);
+                    await SequenceAsync(AttackPhase.SequenceReady, time, _attackTokenSource.Token, onEnd: SetIdle);
                 }
             }
             catch (TaskCanceledException)
@@ -107,7 +107,7 @@ namespace Attack
             }
         }
 
-        private async Task SequenceAsync(AttackState state, float time, CancellationToken token,
+        private async Task SequenceAsync(AttackPhase state, float time, CancellationToken token,
             Action onCancel = null, Action onEnd = null, Action onFinal = null)
         {
             _attackPlayerData.AttackSequenceState.Value = state;
@@ -144,8 +144,8 @@ namespace Attack
         {
             _attackPlayerData.CurrentSequenceCode = default;
             _attackPlayerData.CurrentSequenceElement = default;
-            _attackPlayerData.AttackSequenceState.Value = AttackState.Idle;
-            _attackPlayerData.AttackProgress.Value = new AttackProgressData(AttackState.Idle, _newDirection, 0, 0);
+            _attackPlayerData.AttackSequenceState.Value = AttackPhase.Idle;
+            _attackPlayerData.AttackProgress.Value = new AttackProgressData(AttackPhase.Idle, _newDirection, 0, 0);
         }
 
         private async void SetAttack()
